@@ -1,34 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Cybersecurity Detector</title>
-</head>
-<body>
-    <h2>AI-Assisted Cybersecurity Detection System</h2>
+{% if result %}
+<hr>
 
-    <form method="post">
-        <input type="text" name="input" placeholder="Enter URL / Message" required>
-        <button type="submit">Analyze</button>
-    </form>
+<p><strong>Entered Input:</strong></p>
+<p style="background:#f2f2f2; padding:10px;">
+    {{ user_input }}
+</p>
 
-    {% if result %}
-        <hr>
+<p><strong>Detected Type:</strong> {{ input_type }}</p>
 
-        <p><strong>Entered Input:</strong></p>
-        <p style="background:#f2f2f2; padding:10px;">
-            {{ user_input }}
-        </p>
+<h3>Status: {{ result }}</h3>
+<p><strong>Risk Score:</strong> {{ score }}/100</p>
+<p><strong>Advisory:</strong> {{ advice }}</p>
 
-        <h3>Status: {{ result }}</h3>
-        <p><strong>Risk Score:</strong> {{ score }}/100</p>
-        <p><strong>Advisory:</strong> {{ advice }}</p>
-
-        <h4>Detection Reasons:</h4>
-        <ul>
-            {% for reason in reasons %}
-                <li>{{ reason }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-</body>
-</html>
+<h4>Detection Reasons:</h4>
+<ul>
+    {% for reason in reasons %}
+        <li>{{ reason }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
