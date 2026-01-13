@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cybersecurity Detector</title>
+</head>
+<body>
+    <h2>AI-Assisted Cybersecurity Detection</h2>
+    <form method="post">
+        <input type="text" name="input" placeholder="Enter URL or Message" required>
+        <button type="submit">Check</button>
+    </form>
+
+    {% if result %}
+        <p>Result: {{ result }}</p>
+    {% endif %}
+</body>
+</html>
