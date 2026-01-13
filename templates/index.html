@@ -4,14 +4,25 @@
     <title>Cybersecurity Detector</title>
 </head>
 <body>
-    <h2>AI-Assisted Cybersecurity Detection</h2>
+    <h2>AI-Assisted Cybersecurity Detection System</h2>
+
     <form method="post">
-        <input type="text" name="input" placeholder="Enter URL or Message" required>
-        <button type="submit">Check</button>
+        <input type="text" name="input" placeholder="Enter URL / Message" required>
+        <button type="submit">Analyze</button>
     </form>
 
     {% if result %}
-        <h3>Result: {{ result }}</h3>
+        <hr>
+        <h3>Status: {{ result }}</h3>
+        <p><strong>Risk Score:</strong> {{ score }}/100</p>
+        <p><strong>Advisory:</strong> {{ advice }}</p>
+
+        <h4>Detection Reasons:</h4>
+        <ul>
+            {% for reason in reasons %}
+                <li>{{ reason }}</li>
+            {% endfor %}
+        </ul>
     {% endif %}
 </body>
 </html>

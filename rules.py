@@ -1,12 +1,27 @@
 def rule_based_check(text):
     score = 0
-    keywords = ["verify", "urgent", "password", "login", "bank"]
+    reasons = []
 
-    for word in keywords:
+    keywords = {
+        "verify": 15,
+        "urgent": 20,
+        "password": 25,
+        "login": 20,
+        "bank": 20,
+        "click": 10
+    }
+
+    for word, weight in keywords.items():
         if word in text.lower():
-            score += 20
+            score += weight
+            reasons.append(f"Contains keyword: {word}")
 
     if "http://" in text:
-        score += 30
+        score += 25
+        reasons.append("Uses insecure HTTP link")
 
-    return score
+    if len(text) < 15:
+        score += 10
+        reasons.append("Very short suspicious message")
+
+    return score, reasons
