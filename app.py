@@ -11,6 +11,7 @@ def index():
     score = None
     advice = None
     reasons = []
+    user_input = None
 
     if request.method == "POST":
         user_input = request.form["input"]
@@ -21,6 +22,7 @@ def index():
 
     return render_template(
         "index.html",
+        user_input=user_input,
         result=result,
         score=score,
         advice=advice,
