@@ -1,37 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Cybersecurity Detector</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Assisted Cybersecurity Detection System - Analyze URLs and messages for potential threats">
+    <title>AI Cybersecurity Detector | Threat Analysis Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h2>AI-Assisted Cybersecurity Detection System</h2>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-icon">🛡️</div>
+            <h1>AI Cybersecurity Detector</h1>
+            <p>Advanced Threat Detection & Analysis System</p>
+        </header>
 
-    <form method="post">
-        <input type="text" name="input" placeholder="Enter URL / Message" required>
-        <button type="submit">Analyze</button>
-    </form>
+        <!-- Main Card -->
+        <div class="card">
+            <!-- Input Form -->
+            <form method="post" id="analyzeForm">
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            name="input" 
+                            class="input-field" 
+                            placeholder="Enter URL or message to analyze..." 
+                            required
+                            autocomplete="off"
+                            value="{{ user_input if user_input else '' }}"
+                        >
+                        <button type="submit" class="btn btn-primary">
+                            🔍 Analyze
+                        </button>
+                    </div>
+                </div>
+            </form>
 
-    {% if result %}
-    <hr>
+            <!-- Results Section -->
+            {% if result %}
+            <div class="results-section">
+                <div class="divider"></div>
 
-    <p><strong>Entered Input:</strong></p>
-    <p style="background:#f2f2f2; padding:10px;">
-        {{ user_input }}
-    </p>
+                <!-- Input Display -->
+                <div class="input-display">
+                    <h3>Analyzed Input</h3>
+                    <p>{{ user_input }}</p>
+                </div>
 
-    <p><strong>Detected Type:</strong> {{ input_type }}</p>
+                <!-- Input Type Badge -->
+                <div class="type-badge">
+                    📋 Type: {{ input_type }}
+                </div>
 
-    <h3>Status: {{ result }}</h3>
-    <p><strong>Risk Score:</strong> {{ score }}/100</p>
-    <p><strong>Advisory:</strong> {{ advice }}</p>
+                <!-- Status Card -->
+                {% set status_class = 'status-safe' if score < 30 else ('status-suspicious' if score < 70 else 'status-malicious') %}
+                {% set progress_class = 'progress-safe' if score < 30 else ('progress-suspicious' if score < 70 else 'progress-malicious') %}
+                
+                <div class="status-card {{ status_class }}">
+                    <div class="status-title">
+                        {% if score < 30 %}
+                            ✅ {{ result }}
+                        {% elif score < 70 %}
+                            ⚠️ {{ result }}
+                        {% else %}
+                            🚨 {{ result }}
+                        {% endif %}
+                    </div>
 
-    <h4>Detection Reasons:</h4>
-    <ul>
-        {% for reason in reasons %}
-            <li>{{ reason }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+                    <!-- Risk Score -->
+                    <div class="risk-score">
+                        <div class="risk-label">Risk Score</div>
+                        <div class="score-value">{{ score }}</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar {{ progress_class }}" style="width: {{ score }}%;"></div>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Advisory Box -->
+                <div class="advisory-box">
+                    <h3>💡 Advisory</h3>
+                    <p>{{ advice }}</p>
+                </div>
+
+                <!-- Detection Reasons -->
+                <div class="reasons-section">
+                    <h3>🔍 Detection Reasons</h3>
+                    <ul class="reasons-list">
+                        {% for reason in reasons %}
+                        <li class="reason-item">
+                            <span class="reason-icon">▪️</span>
+                            <span class="reason-text">{{ reason }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
