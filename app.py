@@ -17,11 +17,17 @@ def index():
 
     if request.method == "POST":
         user_input = request.form["input"]
-        input_type = detect_input_type(user_input)
-
-        score, reasons = rule_based_check(user_input, input_type)
+        
+        # Get enhanced detection with detailed analysis
+        detection_result = detect_input_type(user_input)
+        input_type = detection_result['type']
+        
+        # Pass detection data to rule_based_check for comprehensive analysis
+        score, reasons = rule_based_check(user_input, input_type, detection_result)
+        
         result = final_decision(score)
         advice = advisory_message(result)
+
 
     return render_template(
         "index.html",
@@ -34,4 +40,6 @@ def index():
     )
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    import os
+    port = int(os.environ.get("PORT", 7860))
+    app.run(host="0.0.0.0", port=port, debug=False)
