@@ -66,3 +66,15 @@ htmlcov/
 
 # Docker
 *.dockerignore
+
+# Data files (large datasets)
+data/*.csv
+data/*.json
+data/*.txt
+
+# Machine Learning Models
+models/
+*.pkl
+*.joblib
+*.h5
+*.model

@@ -1,6 +1,17 @@
+import re
+
+# Try to import ML predictor (gracefully handle if models not trained yet)
+try:
+    from ml_predictor import ml_predictor
+    ML_AVAILABLE = True
+except Exception as e:
+    ML_AVAILABLE = False
+    print(f"⚠ ML models not available: {e}")
+
 def rule_based_check(text, input_type, detection_data=None):
     """
-    Enhanced rule-based checking system that integrates with input_detector analysis.
+    Enhanced rule-based checking system that integrates with input_detector analysis
+    and ML predictions.
     
     Args:
         text: The input text (URL or message)
@@ -12,6 +23,32 @@ def rule_based_check(text, input_type, detection_data=None):
     """
     score = 0
     reasons = []
+    
+    # ============ ML PREDICTIONS (if available) ============
+    if ML_AVAILABLE:
+        try:
+            if input_type == "URL":
+                ml_result = ml_predictor.predict_url(text)
+                if ml_result:
+                    ml_score = ml_result['ml_score']
+                    score += ml_score
+                    reasons.append(
+                        f"ML Model: {ml_result['prediction'].upper()} "
+                        f"(confidence: {ml_result['confidence']:.1%}, score: +{ml_score})"
+                    )
+            else:  # MESSAGE
+                ml_result = ml_predictor.predict_message(text)
+                if ml_result:
+                    ml_score = ml_result['ml_score']
+                    score += ml_score
+                    reasons.append(
+                        f"ML Model: {ml_result['prediction'].upper()} "
+                        f"(confidence: {ml_result['confidence']:.1%}, score: +{ml_score})"
+                    )
+        except Exception as e:
+            print(f"ML prediction error: {e}")
+    
+
     
     # If we have detection data from input_detector, use it
     if detection_data and 'risks' in detection_data:
